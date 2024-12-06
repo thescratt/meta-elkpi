@@ -2,8 +2,11 @@
 # - Override SUPPORTED_BUFFER_SIZES
 # - Add elk-pi supported sushi examples
 
+SRCREV = "71c94538591b384529f5f8b778e4ecac8cdab2f9"
+
 # Define supported buffer size for this board
 SUPPORTED_BUFFER_SIZES = "32 64 128"
+
 
 # Add examples and sound files
 CONFIG_FILES_DIR = "/home/mind/config_files"
