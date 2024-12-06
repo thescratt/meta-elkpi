@@ -1,3 +1,4 @@
+# Note: This recipe is only for Elk Audio OS 0.11.0 or lower.
 SUMMARY = "Install Elk BlackBoard related files in the system"
 HOMEPAGE = "https://github.com/elk-audio/elk-examples"
 LICENSE = "GPLv3"
@@ -22,11 +23,10 @@ do_install() {
     install -m 0644 elk_ui.py ${D}${PYTHON_SITEPACKAGES_DIR}/
 }
 
-FILES_${PN} += "\
+FILES:${PN} += "\
     ${SENSEI_CONFIG_DIR} \
     ${SENSEI_CONFIG_DIR}/* \
     ${PYTHON_SITEPACKAGES_DIR}/* \
 "
 
-RDEPENDS_${PN} += " liberation-fonts"
-
+RDEPENDS:${PN} += " liberation-fonts"

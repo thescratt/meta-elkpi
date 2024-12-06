@@ -6,3 +6,4 @@ part --source bootimg-partition --ondisk sda --fstype=vfat --label boot --active
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfs1 --align 1024 --size 2048M --use-uuid
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfs2 --align 1024 --size 2048M --use-uuid
 part --ondisk sda --fstype=ext4 --label userdata --align 1024 --size 64000M
+

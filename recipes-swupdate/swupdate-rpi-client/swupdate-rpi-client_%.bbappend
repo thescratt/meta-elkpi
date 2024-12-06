@@ -1,12 +1,18 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+# Append for swupdate-rpi-client
+# - Populates the /etc/sw_version file
+# - Create symlink /www/sw_version.txt to /etc/sw_version
+# - Add swupdate-rpi-client script
+# - Add notify-swupdate-start scripts
+
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
     file://swupdate-rpi-client \
     file://notify-swupdate-start \
 "
 
-do_install_append() {
-    echo "${SWU_VERSION}" >>${WORKDIR}/sw_version
+do_install:append() {
+    echo "${SWU_VERSION}" > ${WORKDIR}/sw_version
     install -d ${D}/www
     install -m 0755 ${WORKDIR}/swupdate-rpi-client ${D}${bindir}
     install -m 0755 ${WORKDIR}/notify-swupdate-start ${D}${bindir}
@@ -14,5 +20,4 @@ do_install_append() {
     ln -s -r ${D}${sysconfdir}/sw_version ${D}/www/sw_version.txt
 }
 
-FILES_${PN} += "/www"
-
+FILES:${PN} += "/www"

@@ -1,26 +1,47 @@
-PV = "0.12.0+${SRCREV}"
+# Sushi recipe append:
+# - Override SUPPORTED_BUFFER_SIZES
+# - Add elk-pi supported sushi examples
 
 SRCREV = "71c94538591b384529f5f8b778e4ecac8cdab2f9"
 
-EXTRA_OECMAKE += "\
-    -DCMAKE_BUILD_TYPE=Release \
-    -DWITH_RPC_INTERFACE=TRUE \
-    -DWITH_JACK=FALSE \
-    -DWITH_VST3=TRUE \
-    -DBUILD_TWINE=FALSE \
-    -DXENOMAI_BASE_DIR=${WORKDIR}/recipe-sysroot/usr/xenomai \
-    -DWITH_UNIT_TESTS=FALSE \
-    -DWITH_LINK=TRUE \
-    -DWITH_LV2=TRUE \
-    -DWITH_LV2_MDA_TESTS=FALSE \
+# Define supported buffer size for this board
+SUPPORTED_BUFFER_SIZES = "32 64 128"
+
+
+# Add examples and sound files
+CONFIG_FILES_DIR = "/home/mind/config_files"
+SOUND_FILES_DIR = "/home/mind/soundfiles"
+
+CONFIG_FILES = "\
+    arp_peakmeter_osc_broadcast.json \
+    cv_to_synth.json \
+    empty.json \
+    freeverb_aux.json \
+    fx.json \
+    multi_track.json \
+    play_arp_mda_link.json \
+    play_brickworks_fx.json \
+    play_brickworks_synth.json \
+    play_lv2.json \
+    play_master_gain.json \
+    play_vst2.json \
+    play_vst3.json \
+    prepost_tracks.json \
+    rt_midi.json \
+    send_return_seq.json \
 "
 
-# Add VST2 support if VST2SDK_PATH variable in local.conf is set and not empty.
-EXTRA_OECMAKE += "${@bb.utils.contains('VST2SDK_PATH', \
-                 '', \
-                 ' -DWITH_VST2=TRUE -DVST2_SDK_PATH=' + d.getVar('VST2SDK_PATH'), \
-                 ' -DWITH_VST2=FALSE ' \
-                 , d)}"
+do_install:append() {
+    install -d ${D}${CONFIG_FILES_DIR}
+    install -d ${D}${SOUND_FILES_DIR}
+    for file in ${CONFIG_FILES};
+    do
+        install -m 0644 ${WORKDIR}/git/misc/config_files/${file} ${D}${CONFIG_FILES_DIR}/${file}
+    done
+    install -m 0644 ${WORKDIR}/git/misc/soundfiles/* ${D}${SOUND_FILES_DIR}/
+}
 
-INSANE_SKIP_${PN} += "dev-deps"
-
+FILES:${PN} += "${CONFIG_FILES_DIR}"
+FILES:${PN} += "${CONFIG_FILES_DIR}/*"
+FILES:${PN} += "${SOUND_FILES_DIR}"
+FILES:${PN} += "${SOUND_FILES_DIR}/*"
